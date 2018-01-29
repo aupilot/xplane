@@ -11,7 +11,7 @@ X.init;
 % will be executed with each datagram received. To stop this - clear X 
 X.request;
 
-% print current state (updated automatically 20 times per second)
+% print the current state (updated automatically 20 times per second)
 X
 
 % thrust vector UP for 2 first engines
@@ -19,3 +19,6 @@ X.setVector([90,90])
  
 % Go!
 X.setThrottle([0.99 0.99 0.7])
+
+%
+% X.setApproach('KSEA', [0.4 0.4 0.02], [0 0])
