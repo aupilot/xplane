@@ -17,7 +17,11 @@ http://aupilot.com.au
 #Usefull links:
 
 [1] X-Plane simulator: http://www.x-plane.com
+
 [2] NASA connector: https://github.com/nasa/XPlaneConnect
+
 [3] list of commands: http://siminnovations.com/xplane/command/index.php
+
 [4] list of datarefs: http://siminnovations.com/xplane/dataref/index.php
+
 [5] XPlane specific quaternions representation: http://www.xpluginsdk.org/downloads/TestQuaternions.cpp
