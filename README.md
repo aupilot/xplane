@@ -5,7 +5,7 @@ Unlike many other simulators, X-Plane calculates aerodynamics for your real airp
 
 Unfortunately, the protocol gets significantly changed from one version of XPlane to another, and old good connectors don't work anymore with the current v.11. That is why we desided to made our own. 
 
-Unlike the NASA's connector [3] it uses a callback to update the plane's current state automatically, so no need to poll. It also uses organic Matlab and should work on any platform (albeit tested on Mac OS only).
+Unlike the NASA's connector [2] it uses a callback to update the plane's current state automatically, so no need to poll. It also uses organic Matlab and should work on any platform (albeit tested on Mac OS only).
 
 The connector is released under MIT licence - do whatever you want. If you found it useful, we appreciate referring to the auPilot project. 
 
@@ -14,7 +14,7 @@ auPilot project
 http://aupilot.com.au
 
 
-#Usefull links:
+## Usefull links:
 
 [1] X-Plane simulator: http://www.x-plane.com
 
