@@ -9,9 +9,9 @@ Unlike the NASA's connector [2] it uses a callback to update the plane's current
 
 The connector is released under MIT licence - do whatever you want. If you found it useful, we appreciate referring to the auPilot project. 
 
-Kirill Makukhin
-auPilot project
-http://aupilot.com.au
+###### Kirill Makukhin
+###### auPilot project
+###### http://aupilot.com.au
 
 
 ## Usefull links:
