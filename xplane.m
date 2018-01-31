@@ -18,7 +18,7 @@ classdef xplane < handle
         
         N_ENGINES  = 3
         N_VECTORED = 2
-        DATA_RATE  = 20     % times per second
+        DATA_RATE  = 50     % times per second
         Gee = 9.81          % gravity at KSEA. your G might be different :)
 
         % egocentric reference frame
@@ -109,10 +109,15 @@ classdef xplane < handle
         
         function obj = dataReceivedCallBack(obj, uu, event)
             if event.Type == 'DatagramReceived' 
-                datagram = fread(uu);
-                % parse the datagram
-                obj.parse(datagram);
-%                 disp(length(datagram))
+                try
+                    datagram = fread(uu);
+                    % parse the datagram
+                    obj.parse(datagram);
+    %                 disp(length(datagram))
+                catch
+                    warning('Broken packet received!\n');
+                end
+
             else
                 disp(event.Type);
             end
