@@ -4,21 +4,25 @@ classdef xplane < handle
     %   K.Makukhin @ auPilot Project
     %   license: MIT (do whatever you want) 
     
+    % Use this class as a reference. Add your own commands/controls to customise to your task.
+    % If you found XPlane crashing all the times (especially on MacOS), remove the tick:
+    % "Settings | Sound | Enable Text ATC Messages". Don't ask me why :)
+    % 
     % alternative from NASA: https://github.com/nasa/XPlaneConnect
     % list of commands: http://siminnovations.com/xplane/command/index.php
     % list of datarefs: http://siminnovations.com/xplane/dataref/index.php
     % quaternions: http://www.xpluginsdk.org/downloads/TestQuaternions.cpp
     
-    % should we use this?: http://www.xsquawkbox.net/xpsdk/mediawiki/MovingThePlane#Positioning_the_User.27s_Aircraft_While_the_Physics_Engine_is_Running
+    % should we use this? http://www.xsquawkbox.net/xpsdk/mediawiki/MovingThePlane#Positioning_the_User.27s_Aircraft_While_the_Physics_Engine_is_Running
     
-    
+    % v 1.06  Return to runway separated from init() 
     
     properties
         u
         
         N_ENGINES  = 3
         N_VECTORED = 2
-        DATA_RATE  = 50     % times per second
+        DATA_RATE  = 20     % times per second
         Gee = 9.81          % gravity at KSEA. your G might be different :)
 
         % egocentric reference frame
@@ -81,30 +85,32 @@ classdef xplane < handle
         % simSpeed -> simulator speedup:  0=paused, 1=normal, 2=double normal speed, 4, 8.
         function init(obj, simSpeed)
             %% init XPlane simulation
-            
+
             % set sim_speed
             dataref = 'sim/time/sim_speed';
             obj.setDataref(simSpeed, dataref); 
             pause(0.1);            
-            %% return to the runway
-            obj.sendCmd('sim/operation/reset_to_runway');   
-            pause(0.2);
-            
-            %% reset the view
-%             obj.sendCmd('sim/view/circle');
-            obj.sendCmd('sim/view/runway');
-            pause(0.1);
-                       
-            %% let the throttle and surfaces to be overriden by our commands
+                                   
+            % let the throttle and surfaces to be overriden by our commands
             dataref = 'sim/operation/override/override_throttles';
             obj.setDataref(1, dataref);
             dataref = 'sim/operation/override/override_control_surfaces';
             obj.setDataref(1, dataref); 
             pause(0.1);
             
-            %% just in case
+            % just in case
             obj.setThrottle([0. 0. 0.])
 
+        end
+        
+        %% return to the runway
+        function return2Runway(obj)
+            obj.sendCmd('sim/operation/reset_to_runway');   
+            pause(0.2);      
+            % it is required to set the view each time after position reset
+%             obj.sendCmd('sim/view/circle');
+            obj.sendCmd('sim/view/runway');
+            pause(0.1);
         end
         
         function obj = dataReceivedCallBack(obj, uu, event)
@@ -156,7 +162,7 @@ classdef xplane < handle
                     obj.E = 0.0;
                     obj.D = 0.0;
                 else
-                    [obj.N, obj.E, obj.D] = geodetic2ned(obj.Lat, obj.Lon, obj.homeAlt, obj.homeLat,obj.homeLon,obj.homeAlt, referenceEllipsoid('GRS 80'),'degrees');
+                    [obj.N, obj.E, obj.D] = geodetic2ned(obj.Lat, obj.Lon, obj.Alt, obj.homeLat,obj.homeLon,obj.homeAlt, referenceEllipsoid('GRS 80'),'degrees');
                     obj.Ve = Vz;  % Vx;     % there is an error in XPlane docs? Their conversion does not seem to be right!
                     obj.Vn = Vx;  % -Vz;
                     obj.Vd = -Vy;
@@ -201,9 +207,9 @@ classdef xplane < handle
             end
         end
         
-        % It is tricky if you have more than one engines. We are changing the engin geometry 
-        % instead of the "right" way of controlling the vector (which only works for one motor).
-        % To make this working - remove "vectors" ticks from engine spec in plainmaker!  
+        % It is tricky if you have more than one engine. We are changing the engines' geometry 
+        % instead of the "right" way of controlling the vector (which saddly only works for one motor).
+        % To make this working - remove "vectors" ticks from engine spec in your plainmaker design!  
         % 0  -> forward
         % 90 -> up
         function setVector(obj, vect)
